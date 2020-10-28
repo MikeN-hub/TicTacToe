@@ -1,63 +1,144 @@
- * {
-    margin: 0;
-    padding: 0;
+*, *::after, *::before {
     box-sizing: border-box;
 }
 
-.game-header {
-    display: flex;
-    justify-content: center;
-    margin: 30px;
-    font-size: 48px;
-    font-weight: 800;
+body {
+    margin: 0;
 }
 
-.game-start {
-    height: 40px;
-    width: 80px;
-    display: flex;
-    margin: 20px auto;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-    background-color: yellowgreen;
-    cursor: pointer;
-    font-style: italic;
-}
-
-.turn-message {
-    display: flex;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: 500;
+:root {
+    --cell-size: 100px;
+    --mark-size: calc(var(--cell-size) * 0.9)
 }
 
 .board {
-    width: 300px;
-    height: 300px;
-    margin: 30px auto;
+    width: 100vw;
+    height: 100vh;
     display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 3px;
-}
-
-.board .cell {
-    background-color: rgba(100, 240, 240, 0.3);
-    display: grid;
-    align-items: center;
+    justify-content: center;
+    align-content: center;
     justify-items: center;
-    font-size: 80px;
+    align-items: center;
+    grid-template-columns: repeat(3, auto);
 }
 
-.result {
-    width: 200px;
-    height: 50px;
-    background-color: cadetblue;
+.cell {
+    width: var(--cell-size);
+    height: var(--cell-size);
+    border: 1px solid black;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px auto;
-    border-radius: 20px;
+    position: relative;
+    cursor: pointer;
 }
 
+.cell:first-child, .cell:nth-child(2), .cell:nth-child(3) {
+    border-top: none;
+}
+
+.cell:nth-child(3n+1) {
+    border-left: none;
+}
+
+.cell:nth-child(3n+3) {
+    border-right: none;
+}
+
+.cell:last-child, .cell:nth-child(7), .cell:nth-child(8) {
+    border-bottom: none;
+}
+
+.cell.x, .cell.circle {
+    cursor: not-allowed;
+}
+
+.cell.x::before, .cell.x::after {
+    background-color: black;
+}
+
+.board.x .cell:not(.x):not(.circle):hover::before,
+.board.x .cell:not(.x):not(.circle):hover::after {
+    background-color: lightgray;
+}
+
+.cell.x::before, .cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::before, .board.x .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    width: calc(var(--mark-size)*0.15);
+    height: var(--mark-size);
+    position: absolute;
+}
+
+.cell.x::before,
+.board.x .cell:not(.x):not(.circle):hover::before {
+    transform: rotate(45deg);
+}
+
+.cell.x::after,
+.board.x .cell:not(.x):not(.circle):hover::after {
+    transform: rotate(-45deg);
+}
+
+.cell.circle::before, .cell.circle::after {
+    background-color: black;
+}
+
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+    background-color: lightgray;
+}
+
+.cell.circle::before, .cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::before,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+}
+
+.cell.circle::before,
+.board.circle .cell:not(.x):not(.circle):hover::before {
+    width: calc(var(--mark-size)*0.9);
+    height: calc(var(--mark-size)*0.9);
+}
+
+.cell.circle::after,
+.board.circle .cell:not(.x):not(.circle):hover::after {
+    width: calc(var(--mark-size)*0.65);
+    height: calc(var(--mark-size)*0.65);
+    background-color: white;
+}
+
+.winning-message {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    font-size: 5rem;
+    flex-direction: column;
+}
+
+.winning-message button {
+    background-color: white;
+    border: 1px solid black;
+    font-size: 3rem;
+    padding: 0.25em 0.5em;
+    cursor: pointer;
+}
+
+.winning-message button:hover {
+    background-color: black;
+    color: white;
+    border-color: white;
+}
+
+.winning-message.show {
+    display: flex;
+}
